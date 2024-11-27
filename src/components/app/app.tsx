@@ -1,8 +1,15 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate
+} from 'react-router-dom';
 import {
   ConstructorPage,
   Feed,
   ForgotPassword,
+  Login,
   NotFound404,
   Profile,
   ProfileOrders,
@@ -19,18 +26,28 @@ import {
 import '../../index.css';
 import styles from './app.module.css';
 
-const App = () => (
-  <div className={styles.app}>
-    <AppHeader />
-    <BrowserRouter>
-      <Routes>
+const App = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const backgroundLocation = location.state?.background;
+
+  const handleClose = () => {
+    navigate(-1);
+  };
+  console.log(location);
+  console.log(navigate);
+
+  return (
+    <div className={styles.app}>
+      <AppHeader />
+      <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         <Route
           path='/login'
           element={
             <ProtectedRoute>
-              <Feed />
+              <Login />
             </ProtectedRoute>
           }
         />
@@ -78,36 +95,38 @@ const App = () => (
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
-      {/* <Routes>
-        <Route
-          path='/feed/:number'
-          element={
-            <Modal title='Детали заказа' onClose={() => {}}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
-        <Route
-          path='/ingredients/:id'
-          element={
-            <Modal title='Ингридиенты' onClose={() => {}}>
-              <IngredientDetails />
-            </Modal>
-          }
-        />
-        <Route
-          path='/profile/orders/:number'
-          element={
-            <ProtectedRoute>
-              <Modal title='Детали заказа' onClose={() => {}}>
+      {backgroundLocation && (
+        <Routes>
+          <Route
+            path='/feed/:number'
+            element={
+              <Modal title='Детали заказа' onClose={handleClose}>
                 <OrderInfo />
               </Modal>
-            </ProtectedRoute>
-          }
-        />
-      </Routes> */}
-    </BrowserRouter>
-  </div>
-);
+            }
+          />
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title='Ингредиенты' onClose={handleClose}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <ProtectedRoute>
+                <Modal title='Детали заказа' onClose={handleClose}>
+                  <OrderInfo />
+                </Modal>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      )}
+    </div>
+  );
+};
 
 export default App;

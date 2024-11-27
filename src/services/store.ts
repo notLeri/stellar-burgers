@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { reducer as burgerReducer } from './slices/burgerSlice';
+import { burgerReducer } from '@slices';
+import { userReducer } from '@slices';
 
 import {
   TypedUseSelectorHook,
@@ -9,7 +10,8 @@ import {
 
 const store = configureStore({
   reducer: {
-    burgers: burgerReducer
+    burgers: burgerReducer,
+    users: userReducer
   },
   devTools: process.env.NODE_ENV !== 'production'
 });

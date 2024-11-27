@@ -23,7 +23,8 @@ const burgerSlice = createSlice({
     }
   },
   selectors: {
-    ingredientsSelector: (state) => state.ingredients
+    ingredientsSelector: (state) => state.ingredients,
+    isLoading: (state) => state.isLoading
   },
   extraReducers: (builder) => {
     builder
@@ -39,16 +40,16 @@ const burgerSlice = createSlice({
         }
       )
       .addCase(getIngredients.rejected, (state, action) => {
-        state.error = action.error.message ?? null;
+        state.error = action.error.message ?? 'Unknown error';
         state.isLoading = false;
       });
   }
 });
 
-export const { setIngredients } = burgerSlice.actions;
-export const reducer = burgerSlice.reducer;
+export const burgerReducer = burgerSlice.reducer;
 
-export const { ingredientsSelector } = burgerSlice.selectors;
+export const { setIngredients } = burgerSlice.actions;
+export const { ingredientsSelector, isLoading } = burgerSlice.selectors;
 
 export const getIngredients = createAsyncThunk<TIngredient[]>(
   'burgers/getIngredients',

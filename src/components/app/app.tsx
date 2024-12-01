@@ -34,8 +34,6 @@ const App = () => {
   const handleClose = () => {
     navigate(-1);
   };
-  console.log(location);
-  console.log(navigate);
 
   return (
     <div className={styles.app}>

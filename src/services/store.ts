@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { burgerReducer } from '@slices';
+import { burgerReducer, orderReducer } from '@slices';
 import { userReducer } from '@slices';
 
 import {
@@ -11,7 +11,8 @@ import {
 const store = configureStore({
   reducer: {
     burgers: burgerReducer,
-    users: userReducer
+    users: userReducer,
+    orders: orderReducer
   },
   devTools: process.env.NODE_ENV !== 'production'
 });

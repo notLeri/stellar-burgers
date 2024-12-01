@@ -46,7 +46,6 @@ const userSlice = createSlice({
 
 export const userReducer = userSlice.reducer;
 
-export const {} = userSlice.actions;
 export const { userSelector } = userSlice.selectors;
 
 export const getUser = createAsyncThunk<{ user: TUser }>(

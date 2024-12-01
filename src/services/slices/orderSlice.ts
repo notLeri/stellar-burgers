@@ -1,64 +1,56 @@
 import { getFeedsApi } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TOrder, TOrdersData, TUser } from '@utils-types';
+import { TIngredient } from '@utils-types';
+import { TOrdersData } from '@utils-types';
 
 type TOrderState = {
-    restorauntOrders: {
-        orders: TOrder[];
-        total: number;
-        totalToday: number;
-    };
-    isLoading: boolean;
-    error: string | null;
+  restorauntOrders: TOrdersData;
+  isLoading: boolean;
+  error: string | null;
 };
 
 const initialState: TOrderState = {
-    restorauntOrders: {
-        orders: [],
-        total: 0,
-        totalToday: 0
-    },
-    isLoading: false,
-    error: null
+  restorauntOrders: {
+    orders: [],
+    total: 0,
+    totalToday: 0
+  },
+  isLoading: false,
+  error: null
 };
 
 const orderSlice = createSlice({
-  name: 'order',
+  name: 'orders',
   initialState,
-  reducers: {
-    orderPrice: (state, action: PayloadAction<{ ingredients: string[] }>) => {
-
-    }
-  },
+  reducers: {},
   selectors: {
-    // orderSelector: (state) => state.order
+    ordersSelector: (state) => state.restorauntOrders.orders
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getUser.pending, (state) => {
+      .addCase(getFeeds.pending, (state) => {
         state.error = null;
         state.isLoading = true;
       })
       .addCase(
-        getUser.fulfilled,
+        getFeeds.fulfilled,
         (state, action: PayloadAction<TOrdersData>) => {
           state.isLoading = false;
           state.restorauntOrders = action.payload;
         }
       )
-      .addCase(getUser.rejected, (state, action) => {
+      .addCase(getFeeds.rejected, (state, action) => {
         state.error = action.error.message ?? null;
         state.isLoading = false;
       });
   }
 });
 
-export const userReducer = orderSlice.reducer;
+export const orderReducer = orderSlice.reducer;
 
-export const {} = orderSlice.actions;
-export const {  } = orderSlice.selectors;
+export const { ordersSelector } = orderSlice.selectors;
 
-export const getUser = createAsyncThunk<TOrdersData>(
-  'users/getUser',
+export const getFeeds = createAsyncThunk<TOrdersData>(
+  'orders/getFeeds',
   async () => getFeedsApi()
 );

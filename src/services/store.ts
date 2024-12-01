@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { burgerReducer, orderReducer } from '@slices';
+import { ingredientReducer, orderReducer } from '@slices';
 import { userReducer } from '@slices';
 
 import {
@@ -10,7 +10,7 @@ import {
 
 const store = configureStore({
   reducer: {
-    burgers: burgerReducer,
+    burgers: ingredientReducer,
     users: userReducer,
     orders: orderReducer
   },

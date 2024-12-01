@@ -2,26 +2,21 @@ import { getIngredientsApi, TIngredientsResponse } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
 
-type TBurgerState = {
+type TIngredientsState = {
   ingredients: TIngredient[];
   isLoading: boolean;
   error: string | null;
 };
-const initialState: TBurgerState = {
+const initialState: TIngredientsState = {
   ingredients: [],
   isLoading: false,
   error: null
 };
 
-const burgerSlice = createSlice({
-  name: 'burgers',
+const ingredientSlice = createSlice({
+  name: 'ingredients',
   initialState,
-  reducers: {
-    setIngredients: (state, action: PayloadAction<TIngredient[]>) => {
-      state.ingredients = action.payload;
-      console.log(state.ingredients);
-    }
-  },
+  reducers: {},
   selectors: {
     ingredientsSelector: (state) => state.ingredients,
     isLoading: (state) => state.isLoading
@@ -46,10 +41,10 @@ const burgerSlice = createSlice({
   }
 });
 
-export const burgerReducer = burgerSlice.reducer;
+export const ingredientReducer = ingredientSlice.reducer;
 
-export const { setIngredients } = burgerSlice.actions;
-export const { ingredientsSelector, isLoading } = burgerSlice.selectors;
+export const {  } = ingredientSlice.actions;
+export const { ingredientsSelector, isLoading } = ingredientSlice.selectors;
 
 export const getIngredients = createAsyncThunk<TIngredient[]>(
   'burgers/getIngredients',

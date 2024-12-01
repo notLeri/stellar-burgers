@@ -10,7 +10,7 @@ import {
 
 const store = configureStore({
   reducer: {
-    burgers: ingredientReducer,
+    ingredients: ingredientReducer,
     users: userReducer,
     orders: orderReducer
   },

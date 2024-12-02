@@ -18,7 +18,7 @@ export const BurgerConstructor: FC = () => {
   const constructorItems = useSelector(burgerConstructorSelector);
 
   useEffect(() => {
-    if (!constructorItems.bun._id && initialBun) {
+    if (!constructorItems.bun && initialBun) {
       dispatch(setBun(initialBun));
     }
   }, [initialBun]);
@@ -27,6 +27,7 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
+    // dispatch(placeOrder(order));
   };
   const closeOrderModal = () => {
     navigate(-1);

@@ -3,7 +3,7 @@ import { FC, useEffect, useMemo } from 'react';
 import { TOrder } from '@utils-types';
 import { FeedInfoUI } from '../ui/feed-info';
 import { useSelector } from '../../services/store';
-import { restorauntOrdersSelector } from '@slices';
+import { feedsSelector } from '@slices';
 
 const getOrders = (orders: TOrder[], status: string): number[] =>
   orders
@@ -12,7 +12,7 @@ const getOrders = (orders: TOrder[], status: string): number[] =>
     .slice(0, 20);
 
 export const FeedInfo: FC = () => {
-  const { orders, total, totalToday } = useSelector(restorauntOrdersSelector);
+  const { orders, total, totalToday } = useSelector(feedsSelector);
 
   const feed = useMemo(
     () => ({

@@ -1,4 +1,3 @@
-import { BurgerConstructor } from '@components';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 
@@ -22,9 +21,10 @@ const burgerConstructorSlice = createSlice({
       });
     },
     deleteIngr: (state, action: PayloadAction<string>) => {
-      state.ingredients = state.ingredients.filter(
-        (item) => item._id !== action.payload
+      const index = state.ingredients.findIndex(
+        (item) => item._id === action.payload
       );
+      state.ingredients.splice(index, 1);
     },
     setBun: (state, action: PayloadAction<TIngredient>) => {
       state.bun = {
@@ -47,21 +47,40 @@ const burgerConstructorSlice = createSlice({
       const temp = state.ingredients[index];
       state.ingredients[index] = state.ingredients[index + 1];
       state.ingredients[index + 1] = temp;
+    },
+    resetConstructor: (state) => {
+      state.bun = null;
+      state.ingredients = [];
     }
   },
   selectors: {
     burgerConstructorSelector: (state: TBurgerConstructorState) => state,
     bunSelector: (state) => state.bun,
-    constructorIngredientsSelector: (state) => state.ingredients
+    constructorIngredientsSelector: (state) => state.ingredients,
+    ingrArrSelector: (state) => {
+      if (!state.bun) return [];
+      const arr: string[] = [];
+      state.ingredients.forEach((ingr) => {
+        arr.push(ingr._id);
+      });
+      return [...arr, state.bun?._id];
+    }
   }
 });
 
 export const burgerConstructorReducer = burgerConstructorSlice.reducer;
 
-export const { addIngr, deleteIngr, setBun, moveUpIngr, moveDownIngr } =
-  burgerConstructorSlice.actions;
+export const {
+  addIngr,
+  deleteIngr,
+  setBun,
+  moveUpIngr,
+  moveDownIngr,
+  resetConstructor
+} = burgerConstructorSlice.actions;
 export const {
   bunSelector,
   constructorIngredientsSelector,
-  burgerConstructorSelector
+  burgerConstructorSelector,
+  ingrArrSelector
 } = burgerConstructorSlice.selectors;

@@ -1,10 +1,9 @@
-import { getFeedsApi, orderBurgerApi, TNewOrderResponse } from '@api';
+import { orderBurgerApi, TNewOrderResponse } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
-import { TOrdersData } from '@utils-types';
+import { TOrderModalData } from '@utils-types';
 
 type TOrderState = {
-  orderModalData: TOrder | null;
+  orderModalData: TOrderModalData | null;
   orderRequest: boolean;
   isFeedsLoading: boolean;
   error: string | null;
@@ -18,7 +17,7 @@ const initialState: TOrderState = {
 };
 
 const orderSlice = createSlice({
-  name: 'orders',
+  name: 'order',
   initialState,
   reducers: {},
   selectors: {
@@ -28,18 +27,18 @@ const orderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(placeOrder.pending, (state) => {
+      .addCase(orderBurger.pending, (state) => {
         state.error = null;
         state.orderRequest = true;
       })
       .addCase(
-        placeOrder.fulfilled,
+        orderBurger.fulfilled,
         (state, action: PayloadAction<TNewOrderResponse>) => {
-          state.orderRequest = action.payload.success;
-          state.orderModalData = action.payload.order;
+          state.orderModalData = action.payload;
+          state.orderRequest = false;
         }
       )
-      .addCase(placeOrder.rejected, (state, action) => {
+      .addCase(orderBurger.rejected, (state, action) => {
         state.error = action.error.message ?? null;
         state.orderRequest = false;
       });
@@ -51,7 +50,7 @@ export const orderReducer = orderSlice.reducer;
 export const { orderRequestSelector, orderModalDataSelector, isFeedsLoading } =
   orderSlice.selectors;
 
-export const placeOrder = createAsyncThunk<TNewOrderResponse, string[]>(
-  'orders/placeOrder',
+export const orderBurger = createAsyncThunk<TNewOrderResponse, string[]>(
+  'order/orderBurger',
   async (order) => await orderBurgerApi(order)
 );

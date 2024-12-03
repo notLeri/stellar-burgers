@@ -4,7 +4,11 @@ import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import {
   burgerConstructorSelector,
+  ingrArrSelector,
+  orderBurger,
+  orderModalDataSelector,
   orderRequestSelector,
+  resetConstructor,
   setBun,
   starterBunSelector
 } from '@slices';
@@ -13,8 +17,10 @@ import { useNavigate } from 'react-router-dom';
 export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const ingrArr = useSelector(ingrArrSelector);
   const initialBun = useSelector(starterBunSelector);
   const orderRequest = useSelector(orderRequestSelector);
+  const orderModalData = useSelector(orderModalDataSelector);
   const constructorItems = useSelector(burgerConstructorSelector);
 
   useEffect(() => {
@@ -23,14 +29,13 @@ export const BurgerConstructor: FC = () => {
     }
   }, [initialBun]);
 
-  const orderModalData = null;
-
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
-    // dispatch(placeOrder(order));
+    dispatch(orderBurger(ingrArr));
+    dispatch(resetConstructor());
   };
   const closeOrderModal = () => {
-    navigate(-1);
+    navigate('/feed');
   };
 
   const price = useMemo(

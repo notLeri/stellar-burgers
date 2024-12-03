@@ -17,7 +17,7 @@ const store = configureStore({
   reducer: {
     users: userReducer,
     feeds: feedsReducer,
-    orders: orderReducer,
+    order: orderReducer,
     ingredients: ingredientReducer,
     burgerConstructor: burgerConstructorReducer
   },

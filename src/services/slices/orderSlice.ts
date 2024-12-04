@@ -35,31 +35,31 @@ const orderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(orderBurger.pending, (state) => {
+      .addCase(orderBurgerThunk.pending, (state) => {
         state.error = null;
         state.orderRequest = true;
       })
       .addCase(
-        orderBurger.fulfilled,
+        orderBurgerThunk.fulfilled,
         (state, action: PayloadAction<TNewOrderResponse>) => {
           state.orderModalData = action.payload;
           state.orderRequest = false;
         }
       )
-      .addCase(orderBurger.rejected, (state, action) => {
+      .addCase(orderBurgerThunk.rejected, (state, action) => {
         state.error = action.error.message ?? null;
         state.orderRequest = false;
       })
-      .addCase(getOrderByNumber.pending, (state) => {
+      .addCase(getOrderByNumberThunk.pending, (state) => {
         state.error = null;
       })
       .addCase(
-        getOrderByNumber.fulfilled,
+        getOrderByNumberThunk.fulfilled,
         (state, action: PayloadAction<TOrderResponse>) => {
           state.orderInfo = action.payload.orders[0];
         }
       )
-      .addCase(getOrderByNumber.rejected, (state, action) => {
+      .addCase(getOrderByNumberThunk.rejected, (state, action) => {
         state.error = action.error.message ?? null;
       });
   }
@@ -74,12 +74,12 @@ export const {
   orderInfoSelector
 } = orderSlice.selectors;
 
-export const orderBurger = createAsyncThunk<TNewOrderResponse, string[]>(
+export const orderBurgerThunk = createAsyncThunk<TNewOrderResponse, string[]>(
   'order/orderBurger',
   async (order) => await orderBurgerApi(order)
 );
 
-export const getOrderByNumber = createAsyncThunk<TOrderResponse, number>(
+export const getOrderByNumberThunk = createAsyncThunk<TOrderResponse, number>(
   'order/getOrderByNumber',
   async (number) => await getOrderByNumberApi(number)
 );

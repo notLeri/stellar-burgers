@@ -4,7 +4,7 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient, TOrder } from '@utils-types';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-  getOrderByNumber,
+  getOrderByNumberThunk,
   ingredientsSelector,
   orderInfoSelector
 } from '@slices';
@@ -19,7 +19,7 @@ export const OrderInfo: FC = () => {
   useEffect(() => {
     if (params.number) {
       const id = parseInt(params.number);
-      dispatch(getOrderByNumber(id));
+      dispatch(getOrderByNumberThunk(id));
     }
   }, [params.number]);
 

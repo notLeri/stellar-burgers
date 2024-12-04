@@ -1,13 +1,41 @@
-import { useSelector } from '../../services/store';
-// import { isAuthCheckedSelector, userDataSelector } from '../services/store/selectors';
-import { Navigate, useLocation } from 'react-router';
+import {
+  checkUserAuthThunk,
+  isAuthCheckedSelector,
+  userDataSelector
+} from '@slices';
+import { useDispatch, useSelector } from '../../services/store';
+import { Navigate } from 'react-router';
+import { Preloader } from '@ui';
+import { useEffect } from 'react';
 
 type ProtectedRouteProps = {
+  onlyUnAuth?: boolean;
   children: React.ReactElement;
 };
 
-export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const location = useLocation();
+export const ProtectedRoute = ({
+  onlyUnAuth,
+  children
+}: ProtectedRouteProps) => {
+  const dispatch = useDispatch();
+  const user = useSelector(userDataSelector);
+  const isAuthChecked = useSelector(isAuthCheckedSelector);
+
+  useEffect(() => {
+    dispatch(checkUserAuthThunk());
+  }, [isAuthChecked]);
+
+  if (!isAuthChecked) {
+    return <Preloader />;
+  }
+
+  if (!onlyUnAuth && !user) {
+    return <Navigate replace to='/login' />;
+  }
+
+  if (onlyUnAuth && user) {
+    return <Navigate replace to={'/'} />;
+  }
 
   return children;
 };

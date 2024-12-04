@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   burgerConstructorSelector,
   ingrArrSelector,
-  orderBurger,
+  orderBurgerThunk,
   orderModalDataSelector,
   orderRequestSelector,
   resetConstructor,
@@ -31,7 +31,7 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
-    dispatch(orderBurger(ingrArr));
+    dispatch(orderBurgerThunk(ingrArr));
     dispatch(resetConstructor());
   };
   const closeOrderModal = () => {

@@ -1,54 +1,109 @@
-import { getUserApi } from '@api';
+import {
+  getUserApi,
+  loginUserApi,
+  registerUserApi,
+  TLoginData,
+  TRegisterData
+} from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
+import { getCookie, setCookie } from '../../utils/cookie';
+
+type TIdentificationRepsonse = {
+  refreshToken: string;
+  accessToken: string;
+  user: TUser;
+};
 
 type TUserState = {
-  user: TUser;
-  isLoading: boolean;
+  user: TUser | null;
+  isAuthChecked: boolean;
   error: string | null;
 };
 
 const initialState: TUserState = {
-  user: {
-    name: '',
-    email: ''
-  },
-  isLoading: false,
+  user: null,
+  isAuthChecked: false,
   error: null
 };
 
 const userSlice = createSlice({
-  name: 'users',
+  name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    authChecked: (state) => {
+      state.isAuthChecked = true;
+    }
+  },
   selectors: {
-    userSelector: (state) => state.user
+    userDataSelector: (state) => state.user,
+    isAuthCheckedSelector: (state) => state.isAuthChecked,
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getUser.pending, (state) => {
+      .addCase(getUserThunk.pending || loginUserThunk.pending, (state) => {
         state.error = null;
-        state.isLoading = true;
       })
       .addCase(
-        getUser.fulfilled,
+        getUserThunk.fulfilled,
         (state, action: PayloadAction<{ user: TUser }>) => {
-          state.isLoading = false;
           state.user = action.payload.user;
         }
       )
-      .addCase(getUser.rejected, (state, action) => {
-        state.error = action.error.message ?? null;
-        state.isLoading = false;
-      });
+      .addCase(
+        loginUserThunk.fulfilled || registerUserThunk.fulfilled,
+        (state, action: PayloadAction<TIdentificationRepsonse>) => {
+          localStorage.setItem('refreshToken', action.payload.refreshToken);
+          setCookie('accessToken', action.payload.accessToken);
+          state.user = action.payload.user;
+        }
+      )
+      .addCase(
+        getUserThunk.rejected ||
+          loginUserThunk.rejected ||
+          registerUserThunk.rejected,
+        (state, action) => {
+          state.error = action.error.message ?? null;
+        }
+      );
   }
 });
 
 export const userReducer = userSlice.reducer;
 
-export const { userSelector } = userSlice.selectors;
+export const { authChecked } = userSlice.actions;
+export const {
+  userDataSelector,
+  isAuthCheckedSelector,
+} = userSlice.selectors;
 
-export const getUser = createAsyncThunk<{ user: TUser }>(
-  'users/getUser',
-  async () => getUserApi()
+export const getUserThunk = createAsyncThunk<{ user: TUser }>(
+  'user/getUser',
+  async () => await getUserApi()
+);
+
+export const checkUserAuthThunk = createAsyncThunk(
+  'user/checkUser',
+  (_, { dispatch }) => {
+    if (getCookie('accessToken')) {
+      dispatch(getUserThunk()).finally(() => {
+        dispatch(authChecked());
+      });
+    } else {
+      dispatch(authChecked());
+    }
+  }
+);
+
+export const loginUserThunk = createAsyncThunk(
+  'user/loginUser',
+  async (data: TLoginData) => {
+    const res = await loginUserApi(data);
+    return res;
+  }
+);
+
+export const registerUserThunk = createAsyncThunk(
+  'user/registerUser',
+  async (data: TRegisterData) => await registerUserApi(data)
 );

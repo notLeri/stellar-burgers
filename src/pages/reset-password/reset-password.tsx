@@ -12,6 +12,7 @@ export const ResetPassword: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    if (!password || !token) return;
     setError(null);
     resetPasswordApi({ password, token })
       .then(() => {

@@ -12,7 +12,6 @@ export const Login: FC = () => {
     e.preventDefault();
     if (!email || !password) return;
     dispatch(loginUserThunk({ email, password }));
-    console.log('submit login');
   };
 
   return (

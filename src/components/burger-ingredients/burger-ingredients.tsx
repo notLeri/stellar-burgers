@@ -35,7 +35,7 @@ export const BurgerIngredients: FC = () => {
 
   useEffect(() => {
     dispatch(getIngredientsThunk());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (inViewBuns) {

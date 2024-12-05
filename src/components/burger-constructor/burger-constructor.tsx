@@ -3,16 +3,16 @@ import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-  addIngr,
   burgerConstructorSelector,
-  checkUserAuthThunk,
-  ingrArrSelector,
-  orderBurgerThunk,
   orderModalDataSelector,
   orderRequestSelector,
-  resetConstructor,
+  checkUserAuthThunk,
   starterBunSelector,
-  userDataSelector
+  orderBurgerThunk,
+  resetConstructor,
+  userDataSelector,
+  ingrArrSelector,
+  addIngr
 } from '@slices';
 import { useNavigate } from 'react-router-dom';
 

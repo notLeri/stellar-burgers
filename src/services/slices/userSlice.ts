@@ -1,6 +1,7 @@
 import {
   getUserApi,
   loginUserApi,
+  logoutApi,
   registerUserApi,
   TLoginData,
   TRegisterData,
@@ -45,6 +46,7 @@ const userSlice = createSlice({
       .addCase(
         getUserThunk.pending ||
           loginUserThunk.pending ||
+          logoutUserThunk.pending ||
           updateUserApiThunk.pending,
         (state) => {
           state.error = null;
@@ -59,8 +61,6 @@ const userSlice = createSlice({
       .addCase(
         updateUserApiThunk.fulfilled,
         (state, action: PayloadAction<{ user: TUser }>) => {
-          localStorage.removeItem('refreshToken');
-          deleteCookie('accessToken');
           state.user = action.payload.user;
         }
       )
@@ -72,9 +72,15 @@ const userSlice = createSlice({
           state.user = action.payload.user;
         }
       )
+      .addCase(logoutUserThunk.fulfilled, (state) => {
+        localStorage.removeItem('refreshToken');
+        deleteCookie('accessToken');
+        state.user = null;
+      })
       .addCase(
         getUserThunk.rejected ||
           loginUserThunk.rejected ||
+          logoutUserThunk.rejected ||
           registerUserThunk.rejected ||
           updateUserApiThunk.rejected,
         (state, action) => {
@@ -120,4 +126,9 @@ export const registerUserThunk = createAsyncThunk(
 export const updateUserApiThunk = createAsyncThunk(
   'user/updateUser',
   async (data: Partial<TRegisterData>) => await updateUserApi(data)
+);
+
+export const logoutUserThunk = createAsyncThunk(
+  'user/logoutUser',
+  async () => await logoutApi()
 );

@@ -5,23 +5,30 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   addIngr,
   burgerConstructorSelector,
+  checkUserAuthThunk,
   ingrArrSelector,
   orderBurgerThunk,
   orderModalDataSelector,
   orderRequestSelector,
   resetConstructor,
-  starterBunSelector
+  starterBunSelector,
+  userDataSelector
 } from '@slices';
 import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector(userDataSelector);
   const ingrArr = useSelector(ingrArrSelector);
   const initialBun = useSelector(starterBunSelector);
   const orderRequest = useSelector(orderRequestSelector);
   const orderModalData = useSelector(orderModalDataSelector);
   const constructorItems = useSelector(burgerConstructorSelector);
+
+  useEffect(() => {
+    dispatch(checkUserAuthThunk());
+  }, [dispatch]);
 
   useEffect(() => {
     if (!constructorItems.bun && initialBun) {
@@ -31,8 +38,10 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
-    dispatch(orderBurgerThunk(ingrArr));
-    dispatch(resetConstructor());
+    if (user) {
+      dispatch(orderBurgerThunk(ingrArr));
+      dispatch(resetConstructor());
+    }
   };
   const closeOrderModal = () => {
     navigate('/feed');

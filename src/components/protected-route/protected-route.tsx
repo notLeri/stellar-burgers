@@ -23,7 +23,7 @@ export const ProtectedRoute = ({
 
   useEffect(() => {
     dispatch(checkUserAuthThunk());
-  }, [isAuthChecked]);
+  }, [dispatch]);
 
   if (!isAuthChecked) {
     return <Preloader />;

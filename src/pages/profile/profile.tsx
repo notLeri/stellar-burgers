@@ -1,7 +1,7 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { getUserThunk, userDataSelector } from '@slices';
+import { getUserThunk, updateUserApiThunk, userDataSelector } from '@slices';
 
 export const Profile: FC = () => {
   const dispatch = useDispatch();
@@ -33,6 +33,13 @@ export const Profile: FC = () => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     if (!formValue.name || !formValue.email || !formValue.password) return;
+    dispatch(
+      updateUserApiThunk({
+        name: formValue.name,
+        email: formValue.email,
+        password: formValue.password
+      })
+    );
   };
 
   const handleCancel = (e: SyntheticEvent) => {

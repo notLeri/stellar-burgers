@@ -3,13 +3,14 @@ import {
   loginUserApi,
   registerUserApi,
   TLoginData,
-  TRegisterData
+  TRegisterData,
+  updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-import { getCookie, setCookie } from '../../utils/cookie';
+import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
 
-type TIdentificationRepsonse = {
+type TIdentificationResponse = {
   refreshToken: string;
   accessToken: string;
   user: TUser;
@@ -37,13 +38,18 @@ const userSlice = createSlice({
   },
   selectors: {
     userDataSelector: (state) => state.user,
-    isAuthCheckedSelector: (state) => state.isAuthChecked,
+    isAuthCheckedSelector: (state) => state.isAuthChecked
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getUserThunk.pending || loginUserThunk.pending, (state) => {
-        state.error = null;
-      })
+      .addCase(
+        getUserThunk.pending ||
+          loginUserThunk.pending ||
+          updateUserApiThunk.pending,
+        (state) => {
+          state.error = null;
+        }
+      )
       .addCase(
         getUserThunk.fulfilled,
         (state, action: PayloadAction<{ user: TUser }>) => {
@@ -51,8 +57,16 @@ const userSlice = createSlice({
         }
       )
       .addCase(
+        updateUserApiThunk.fulfilled,
+        (state, action: PayloadAction<{ user: TUser }>) => {
+          localStorage.removeItem('refreshToken');
+          deleteCookie('accessToken');
+          state.user = action.payload.user;
+        }
+      )
+      .addCase(
         loginUserThunk.fulfilled || registerUserThunk.fulfilled,
-        (state, action: PayloadAction<TIdentificationRepsonse>) => {
+        (state, action: PayloadAction<TIdentificationResponse>) => {
           localStorage.setItem('refreshToken', action.payload.refreshToken);
           setCookie('accessToken', action.payload.accessToken);
           state.user = action.payload.user;
@@ -61,7 +75,8 @@ const userSlice = createSlice({
       .addCase(
         getUserThunk.rejected ||
           loginUserThunk.rejected ||
-          registerUserThunk.rejected,
+          registerUserThunk.rejected ||
+          updateUserApiThunk.rejected,
         (state, action) => {
           state.error = action.error.message ?? null;
         }
@@ -72,10 +87,7 @@ const userSlice = createSlice({
 export const userReducer = userSlice.reducer;
 
 export const { authChecked } = userSlice.actions;
-export const {
-  userDataSelector,
-  isAuthCheckedSelector,
-} = userSlice.selectors;
+export const { userDataSelector, isAuthCheckedSelector } = userSlice.selectors;
 
 export const getUserThunk = createAsyncThunk<{ user: TUser }>(
   'user/getUser',
@@ -97,13 +109,15 @@ export const checkUserAuthThunk = createAsyncThunk(
 
 export const loginUserThunk = createAsyncThunk(
   'user/loginUser',
-  async (data: TLoginData) => {
-    const res = await loginUserApi(data);
-    return res;
-  }
+  async (data: TLoginData) => await loginUserApi(data)
 );
 
 export const registerUserThunk = createAsyncThunk(
   'user/registerUser',
   async (data: TRegisterData) => await registerUserApi(data)
+);
+
+export const updateUserApiThunk = createAsyncThunk(
+  'user/updateUser',
+  async (data: Partial<TRegisterData>) => await updateUserApi(data)
 );

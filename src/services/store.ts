@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import {
   burgerConstructorReducer,
-  feedsReducer,
   ingredientReducer,
-  orderReducer
+  userOrdersReducer,
+  feedsReducer,
+  orderReducer,
+  userReducer
 } from '@slices';
-import { userReducer } from '@slices';
 
 import {
   TypedUseSelectorHook,
@@ -15,11 +16,12 @@ import {
 
 const store = configureStore({
   reducer: {
-    user: userReducer,
+    burgerConstructor: burgerConstructorReducer,
+    ingredients: ingredientReducer,
+    userOrders: userOrdersReducer,
     feeds: feedsReducer,
     order: orderReducer,
-    ingredients: ingredientReducer,
-    burgerConstructor: burgerConstructorReducer
+    user: userReducer
   },
   devTools: process.env.NODE_ENV !== 'production'
 });

@@ -27,8 +27,8 @@ const userOrdersSlice = createSlice({
       .addCase(
         getUserOrdersThunk.fulfilled,
         (state, action: PayloadAction<TOrder[]>) => {
-          state.orders = action.payload;
           state.error = null;
+          state.orders = action.payload;
         }
       )
       .addCase(getUserOrdersThunk.rejected, (state, action) => {

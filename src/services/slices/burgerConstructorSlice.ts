@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 
 type TBurgerConstructorState = {
@@ -14,23 +14,24 @@ const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {
-    addIngr: (state, action: PayloadAction<TIngredient>) => {
-      state.ingredients.push({
-        id: Math.random().toString(36),
-        ...action.payload
-      });
+    addIngr: {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
+        if (action.payload.type === 'bun') {
+          state.bun = action.payload
+        } else {
+          state.ingredients.push(action.payload);
+        }
+      },
+      prepare: (ingredientsObject: TIngredient) => {
+        const id = nanoid();
+        return { payload: { id, ...ingredientsObject } };
+      }
     },
     deleteIngr: (state, action: PayloadAction<string>) => {
       const index = state.ingredients.findIndex(
         (item) => item._id === action.payload
       );
       state.ingredients.splice(index, 1);
-    },
-    setBun: (state, action: PayloadAction<TIngredient>) => {
-      state.bun = {
-        id: Math.random().toString(36),
-        ...action.payload
-      };
     },
     moveUpIngr: (state, action: PayloadAction<string>) => {
       const index = state.ingredients.findIndex(
@@ -73,7 +74,6 @@ export const burgerConstructorReducer = burgerConstructorSlice.reducer;
 export const {
   addIngr,
   deleteIngr,
-  setBun,
   moveUpIngr,
   moveDownIngr,
   resetConstructor

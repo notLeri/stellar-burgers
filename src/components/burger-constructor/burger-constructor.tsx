@@ -3,13 +3,13 @@ import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import {
+  addIngr,
   burgerConstructorSelector,
   ingrArrSelector,
   orderBurgerThunk,
   orderModalDataSelector,
   orderRequestSelector,
   resetConstructor,
-  setBun,
   starterBunSelector
 } from '@slices';
 import { useNavigate } from 'react-router-dom';
@@ -25,7 +25,7 @@ export const BurgerConstructor: FC = () => {
 
   useEffect(() => {
     if (!constructorItems.bun && initialBun) {
-      dispatch(setBun(initialBun));
+      dispatch(addIngr(initialBun));
     }
   }, [initialBun]);
 

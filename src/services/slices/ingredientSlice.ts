@@ -19,7 +19,7 @@ const ingredientSlice = createSlice({
   reducers: {},
   selectors: {
     starterBunSelector: (state) =>
-      state.ingredients.find((ingr) => ingr.type === 'bun'),
+      state.ingredients.find((ingr) => ingr.type === 'bun') ?? null,
     ingredientsSelector: (state) => state.ingredients,
     isIngrLoading: (state) => state.isIngrLoading
   },

@@ -5,7 +5,7 @@ import { OrderCardProps } from './type';
 import { TIngredient } from '@utils-types';
 import { OrderCardUI } from '../ui/order-card';
 import { useDispatch, useSelector } from '../../services/store';
-import { getIngredients, ingredientsSelector } from '@slices';
+import { getIngredientsThunk, ingredientsSelector } from '@slices';
 
 const maxIngredients = 6;
 
@@ -15,7 +15,7 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   const ingredients = useSelector(ingredientsSelector);
 
   useEffect(() => {
-    dispatch(getIngredients());
+    dispatch(getIngredientsThunk());
   }, []);
 
   const orderInfo = useMemo(() => {

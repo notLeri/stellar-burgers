@@ -29,18 +29,18 @@ const feedsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getFeeds.pending, (state) => {
+      .addCase(getFeedsThunk.pending, (state) => {
         state.error = null;
         state.isFeedsLoading = true;
       })
       .addCase(
-        getFeeds.fulfilled,
+        getFeedsThunk.fulfilled,
         (state, action: PayloadAction<TOrdersData>) => {
           state.isFeedsLoading = false;
           state.feeds = action.payload;
         }
       )
-      .addCase(getFeeds.rejected, (state, action) => {
+      .addCase(getFeedsThunk.rejected, (state, action) => {
         state.error = action.error.message ?? null;
         state.isFeedsLoading = false;
       });
@@ -56,7 +56,7 @@ export const {
   totalTodaySelector
 } = feedsSlice.selectors;
 
-export const getFeeds = createAsyncThunk<TOrdersData>(
+export const getFeedsThunk = createAsyncThunk<TOrdersData>(
   'orders/getFeeds',
   async () => await getFeedsApi()
 );

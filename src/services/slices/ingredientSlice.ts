@@ -25,18 +25,18 @@ const ingredientSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getIngredients.pending, (state) => {
+      .addCase(getIngredientsThunk.pending, (state) => {
         state.error = null;
         state.isIngrLoading = true;
       })
       .addCase(
-        getIngredients.fulfilled,
+        getIngredientsThunk.fulfilled,
         (state, action: PayloadAction<TIngredient[]>) => {
           state.isIngrLoading = false;
           state.ingredients = action.payload;
         }
       )
-      .addCase(getIngredients.rejected, (state, action) => {
+      .addCase(getIngredientsThunk.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';
         state.isIngrLoading = false;
       });
@@ -48,7 +48,7 @@ export const ingredientReducer = ingredientSlice.reducer;
 export const { ingredientsSelector, isIngrLoading, starterBunSelector } =
   ingredientSlice.selectors;
 
-export const getIngredients = createAsyncThunk<TIngredient[]>(
+export const getIngredientsThunk = createAsyncThunk<TIngredient[]>(
   'ingredients/getIngredients',
   async () => await getIngredientsApi()
 );

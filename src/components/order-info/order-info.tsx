@@ -4,6 +4,7 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient, TOrder } from '@utils-types';
 import { useDispatch, useSelector } from '../../services/store';
 import {
+  getIngredientsThunk,
   getOrderByNumberThunk,
   ingredientsSelector,
   orderInfoSelector
@@ -22,6 +23,10 @@ export const OrderInfo: FC = () => {
       dispatch(getOrderByNumberThunk(id));
     }
   }, [params.number]);
+
+  useEffect(() => {
+    dispatch(getIngredientsThunk());
+  }, []);
 
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;

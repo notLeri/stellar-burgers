@@ -74,10 +74,10 @@ export const orderReducer = orderSlice.reducer;
 
 export const { resetOrderModalData } = orderSlice.actions;
 export const {
-  orderRequestSelector,
   orderModalDataSelector,
-  isFeedsLoading,
-  orderInfoSelector
+  orderRequestSelector,
+  orderInfoSelector,
+  isFeedsLoading
 } = orderSlice.selectors;
 
 export const orderBurgerThunk = createAsyncThunk<TNewOrderResponse, string[]>(

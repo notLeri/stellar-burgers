@@ -10,6 +10,7 @@ import {
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
+import { useSelector } from '../store';
 
 type TIdentificationResponse = {
   refreshToken: string;

@@ -18,7 +18,7 @@ const ingredientSlice = createSlice({
   selectors: {
     starterBunSelector: (state) =>
       state.ingredients.find((ingr) => ingr.type === 'bun') ?? null,
-    ingredientsSelector: (state) => state.ingredients,
+    ingredientsSelector: (state) => state.ingredients
   },
   extraReducers: (builder) => {
     builder

@@ -7,21 +7,16 @@ import {
   orderModalDataSelector,
   orderRequestSelector,
   checkUserAuthThunk,
-  starterBunSelector,
   orderBurgerThunk,
-  resetConstructor,
   userDataSelector,
   ingrArrSelector,
-  addIngr
+  resetOrderModalData
 } from '@slices';
-import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(userDataSelector);
   const ingrArr = useSelector(ingrArrSelector);
-  const initialBun = useSelector(starterBunSelector);
   const orderRequest = useSelector(orderRequestSelector);
   const orderModalData = useSelector(orderModalDataSelector);
   const constructorItems = useSelector(burgerConstructorSelector);
@@ -30,21 +25,14 @@ export const BurgerConstructor: FC = () => {
     dispatch(checkUserAuthThunk());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!constructorItems.bun && initialBun) {
-      dispatch(addIngr(initialBun));
-    }
-  }, [initialBun]);
-
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
     if (user) {
       dispatch(orderBurgerThunk(ingrArr));
-      dispatch(resetConstructor());
     }
   };
   const closeOrderModal = () => {
-    navigate('/feed');
+    dispatch(resetOrderModalData());
   };
 
   const price = useMemo(

@@ -33,18 +33,14 @@ const burgerConstructorSlice = createSlice({
       );
       state.ingredients.splice(index, 1);
     },
-    moveUpIngr: (state, action: PayloadAction<string>) => {
-      const index = state.ingredients.findIndex(
-        (item) => item._id === action.payload
-      );
+    moveUpIngr: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
       const temp = state.ingredients[index];
       state.ingredients[index] = state.ingredients[index - 1];
       state.ingredients[index - 1] = temp;
     },
-    moveDownIngr: (state, action: PayloadAction<string>) => {
-      const index = state.ingredients.findIndex(
-        (item) => item._id === action.payload
-      );
+    moveDownIngr: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
       const temp = state.ingredients[index];
       state.ingredients[index] = state.ingredients[index + 1];
       state.ingredients[index + 1] = temp;
@@ -64,7 +60,7 @@ const burgerConstructorSlice = createSlice({
       state.ingredients.forEach((ingr) => {
         arr.push(ingr._id);
       });
-      return [...arr, state.bun?._id];
+      return [...arr, state.bun?._id, state.bun?._id];
     }
   }
 });

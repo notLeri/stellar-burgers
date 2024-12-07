@@ -5,6 +5,7 @@ import {
   TOrderResponse
 } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { resetConstructor } from '@slices';
 import { TOrder, TOrderModalData } from '@utils-types';
 
 type TOrderState = {
@@ -26,7 +27,11 @@ const initialState: TOrderState = {
 const orderSlice = createSlice({
   name: 'order',
   initialState,
-  reducers: {},
+  reducers: {
+    resetOrderModalData: (state) => {
+      state.orderModalData = null;
+    }
+  },
   selectors: {
     orderRequestSelector: (state) => state.orderRequest,
     orderModalDataSelector: (state) => state.orderModalData,
@@ -67,6 +72,7 @@ const orderSlice = createSlice({
 
 export const orderReducer = orderSlice.reducer;
 
+export const { resetOrderModalData } = orderSlice.actions;
 export const {
   orderRequestSelector,
   orderModalDataSelector,
@@ -76,7 +82,15 @@ export const {
 
 export const orderBurgerThunk = createAsyncThunk<TNewOrderResponse, string[]>(
   'order/orderBurger',
-  async (order) => await orderBurgerApi(order)
+  async (order, thunkAPI) => {
+    try {
+      const data = await orderBurgerApi(order);
+      thunkAPI.dispatch(resetConstructor());
+      return data;
+    } catch {
+      return Promise.reject();
+    }
+  }
 );
 
 export const getOrderByNumberThunk = createAsyncThunk<TOrderResponse, number>(

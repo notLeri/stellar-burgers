@@ -39,6 +39,7 @@ const userSlice = createSlice({
   },
   selectors: {
     userDataSelector: (state) => state.user,
+    userNameSelector: (state) => state.user?.name,
     isAuthCheckedSelector: (state) => state.isAuthChecked
   },
   extraReducers: (builder) => {
@@ -93,7 +94,8 @@ const userSlice = createSlice({
 export const userReducer = userSlice.reducer;
 
 export const { authChecked } = userSlice.actions;
-export const { userDataSelector, isAuthCheckedSelector } = userSlice.selectors;
+export const { userDataSelector, isAuthCheckedSelector, userNameSelector } =
+  userSlice.selectors;
 
 export const getUserThunk = createAsyncThunk<{ user: TUser }>(
   'user/getUser',

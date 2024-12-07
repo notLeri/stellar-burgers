@@ -27,10 +27,8 @@ const burgerConstructorSlice = createSlice({
         return { payload: { id, ...ingredientsObject } };
       }
     },
-    deleteIngr: (state, action: PayloadAction<string>) => {
-      const index = state.ingredients.findIndex(
-        (item) => item._id === action.payload
-      );
+    deleteIngr: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
       state.ingredients.splice(index, 1);
     },
     moveUpIngr: (state, action: PayloadAction<number>) => {

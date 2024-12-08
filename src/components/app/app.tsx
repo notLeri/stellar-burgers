@@ -19,10 +19,14 @@ import {
 } from '@components';
 import '../../index.css';
 import styles from './app.module.css';
+import { useSelector } from '../../services/store';
+import { orderInfoSelector } from '@slices';
 
 const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const orderInfo = useSelector(orderInfoSelector);
+  const orderNumber = orderInfo?.number.toString();
   const backgroundLocation = location.state?.background;
 
   return (
@@ -79,7 +83,19 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path='/profile/orders/:number' element={<OrderInfo />} />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p
+                className={`text text_type_digits-default ${styles.detailHeader}`}
+              >
+                #{orderNumber && orderNumber.padStart(6, '0')}
+              </p>
+              <OrderInfo />
+            </div>
+          }
+        />
         <Route
           path='/ingredients/:id'
           element={
@@ -91,7 +107,19 @@ const App = () => {
             </div>
           }
         />
-        <Route path='/feed/:number' element={<OrderInfo />} />
+        <Route
+          path='/feed/:number'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p
+                className={`text text_type_digits-default ${styles.detailHeader}`}
+              >
+                #{orderNumber && orderNumber.padStart(6, '0')}
+              </p>
+              <OrderInfo />
+            </div>
+          }
+        />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
@@ -100,7 +128,14 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title='Детали заказа' onClose={() => navigate('/feed')}>
+              <Modal
+                title={
+                  orderNumber
+                    ? `#${orderNumber && orderNumber.padStart(6, '0')}`
+                    : 'Детали заказа'
+                }
+                onClose={() => navigate('/feed')}
+              >
                 <OrderInfo />
               </Modal>
             }
@@ -117,7 +152,14 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal title='' onClose={() => navigate('/profile/orders')}>
+                <Modal
+                  title={
+                    orderNumber
+                      ? `#${orderNumber && orderNumber.padStart(6, '0')}`
+                      : 'Детали заказа'
+                  }
+                  onClose={() => navigate('/profile/orders')}
+                >
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>

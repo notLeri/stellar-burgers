@@ -1,7 +1,10 @@
 .wrap {
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
   width: 640px;
 }
+
 .number {
   text-align: center;
 }

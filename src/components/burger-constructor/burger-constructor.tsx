@@ -12,9 +12,11 @@ import {
   ingrArrSelector,
   resetOrderModalData
 } from '@slices';
+import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector(userDataSelector);
   const ingrArr = useSelector(ingrArrSelector);
   const orderRequest = useSelector(orderRequestSelector);
@@ -29,6 +31,8 @@ export const BurgerConstructor: FC = () => {
     if (!constructorItems.bun || orderRequest) return;
     if (user) {
       dispatch(orderBurgerThunk(ingrArr));
+    } else {
+      navigate('/login');
     }
   };
   const closeOrderModal = () => {

@@ -25,10 +25,6 @@ const App = () => {
   const navigate = useNavigate();
   const backgroundLocation = location.state?.background;
 
-  const handleClose = () => {
-    navigate(-1);
-  };
-
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -84,7 +80,17 @@ const App = () => {
           }
         />
         <Route path='/profile/orders/:number' element={<OrderInfo />} />
-        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route
+          path='/ingredients/:id'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p className={`text text_type_main-large ${styles.detailHeader}`}>
+                Детали ингредиента
+              </p>
+              <IngredientDetails />
+            </div>
+          }
+        />
         <Route path='/feed/:number' element={<OrderInfo />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
@@ -94,7 +100,7 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title='Детали заказа' onClose={handleClose}>
+              <Modal title='Детали заказа' onClose={() => navigate('/feed')}>
                 <OrderInfo />
               </Modal>
             }
@@ -102,7 +108,7 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title='Детали ингредиента' onClose={handleClose}>
+              <Modal title='Детали ингредиента' onClose={() => navigate('/')}>
                 <IngredientDetails />
               </Modal>
             }
@@ -111,7 +117,7 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal title='Детали заказа' onClose={handleClose}>
+                <Modal title='' onClose={() => navigate('/profile/orders')}>
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>

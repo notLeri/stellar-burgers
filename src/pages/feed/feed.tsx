@@ -2,7 +2,7 @@ import { Preloader } from '@ui';
 import { FeedUI } from '@ui-pages';
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { getFeedsThunk, ordersSelector } from '@slices';
+import { getFeedsThunk, getIngredientsThunk, ordersSelector } from '@slices';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
@@ -10,6 +10,7 @@ export const Feed: FC = () => {
 
   useEffect(() => {
     dispatch(getFeedsThunk());
+    dispatch(getIngredientsThunk());
   }, []);
 
   function handleGetFeeds() {
